@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'homePage.dart';
+import 'package:flutter/services.dart';
 import 'qp.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+    .then((_) {
+  runApp(MyApp());
+    });
+}
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -15,7 +22,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       // home: MyHomePage(title: 'Stay Hydrated'),
-      home: QuestionPage(title: 'Stuff'),
+      home: MyHomePage(title: 'Stuff'),
     );
   }
 }
