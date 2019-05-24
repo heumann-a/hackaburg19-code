@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'qp.dart';
 import 'util.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/io.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -12,7 +14,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool isConnected = true;
+  bool isConnected = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,9 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignment: Alignment.bottomRight,
                 child: FloatingActionButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => QuestionPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => new QuestionPage(channel: IOWebSocketChannel.connect('ws://echo.websocket.org'),)));
                   },
-                  child: Icon(Icons.arrow_right),
+                  backgroundColor: Color(0xFF60626b),
+                  child: Icon(Icons.fast_forward),
                 )): Container(width: 0, height: 0),
           ],
         ));
