@@ -57,7 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: RaisedButton(
                   onPressed: () {
                       this.widget.channel.sink.add('STATUS');
-                      this.widget.channel.sink.close();
                   },
                   color: isConnected ? Colors.green : Colors.red,
                   child: Text(isConnected ? 'Connected' : 'Connect'),

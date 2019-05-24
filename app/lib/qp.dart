@@ -23,8 +23,10 @@ class _MyQuestionPageState extends State<QuestionPage> {
   void checkForNewAnswers() {
     this.widget.channel.stream.listen((message) {
       setState((){
-      currentQuestion = message.toString();
-      _isButtonDisabled = false;
+      _isButtonDisabled = currentQuestion == message.toString();
+      currentQuestion = message.toString(); 
+      // Uncomment when network stuff is done
+      // _isButtonDisabled = false;
       });
     });
     
