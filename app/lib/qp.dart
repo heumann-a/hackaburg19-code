@@ -13,6 +13,8 @@ class QuestionPage extends StatefulWidget {
 }
 
 class _MyQuestionPageState extends State<QuestionPage> {
+  bool _isButtonDisabled = true;
+  
   @override
   Widget build(BuildContext context) {
     var questionContainer = new Container(
@@ -30,7 +32,7 @@ class _MyQuestionPageState extends State<QuestionPage> {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 24.0),
               child: Text(
-                snapshot.hasData ? '${snapshot.data}' : 'Enter a Question',
+                snapshot.hasData ? '${snapshot.data}' : 'Waiting for question...' ,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.black,
@@ -61,12 +63,18 @@ class _MyQuestionPageState extends State<QuestionPage> {
                 style: TextStyle(fontSize: screenAwareSize(15, context)),
               ),
               color: Colors.red,
+              disabledColor: Colors.redAccent,
               minWidth: screenAwareSize(300, context),
               height: screenAwareSize(75, context),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
               /*  interaction  */
-              onPressed: () {
-                this.widget.channel.sink.add('RED');
-              },
+              onPressed: _isButtonDisabled
+                  ? null
+                  : () {
+                      this.widget.channel.sink.add('RED');
+                      setState(() => _isButtonDisabled = !_isButtonDisabled);
+                    },
             ),
             const SizedBox(
               height: 20,
@@ -77,12 +85,18 @@ class _MyQuestionPageState extends State<QuestionPage> {
                 style: TextStyle(fontSize: screenAwareSize(15, context)),
               ),
               color: Colors.blue,
+              disabledColor: Colors.blueAccent,
               minWidth: screenAwareSize(300, context),
               height: screenAwareSize(75, context),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
               /*  interaction  */
-              onPressed: () {
-                this.widget.channel.sink.add('BLUE');
-              },
+              onPressed: _isButtonDisabled
+                  ? null
+                  : () {
+                      this.widget.channel.sink.add('BLUE');
+                      setState(() => _isButtonDisabled = !_isButtonDisabled);
+                    },
             ),
             const SizedBox(
               height: 20,
@@ -93,12 +107,18 @@ class _MyQuestionPageState extends State<QuestionPage> {
                 style: TextStyle(fontSize: screenAwareSize(15, context)),
               ),
               color: Colors.green,
+              disabledColor: Colors.greenAccent,
               minWidth: screenAwareSize(300, context),
               height: screenAwareSize(75, context),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
               /*  interaction  */
-              onPressed: () {
-                this.widget.channel.sink.add('GREEN');
-              },
+              onPressed: _isButtonDisabled
+                  ? null
+                  : () {
+                      this.widget.channel.sink.add('GREEN');
+                      setState(() => _isButtonDisabled = !_isButtonDisabled);
+                    },
             ),
             const SizedBox(
               height: 20,
@@ -109,12 +129,18 @@ class _MyQuestionPageState extends State<QuestionPage> {
                 style: TextStyle(fontSize: screenAwareSize(15, context)),
               ),
               color: Colors.yellow,
+              disabledColor: Colors.yellowAccent,
               minWidth: screenAwareSize(300, context),
               height: screenAwareSize(75, context),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
               /*  interaction  */
-              onPressed: () {
-                this.widget.channel.sink.add('YELLOW');
-              },
+              onPressed: _isButtonDisabled
+                  ? null
+                  : () {
+                      this.widget.channel.sink.add('YELLOW');
+                      setState(() => _isButtonDisabled = !_isButtonDisabled);
+                    },
             ),
             const SizedBox(
               height: 20,
@@ -125,12 +151,18 @@ class _MyQuestionPageState extends State<QuestionPage> {
                 style: TextStyle(fontSize: screenAwareSize(15, context)),
               ),
               color: Colors.purple,
+              disabledColor: Colors.purpleAccent,
               minWidth: screenAwareSize(300, context),
               height: screenAwareSize(75, context),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
               /*  interaction  */
-              onPressed: () {
-                this.widget.channel.sink.add('PURPLE');
-              },
+              onPressed: _isButtonDisabled
+                  ? null
+                  : () {
+                      this.widget.channel.sink.add('PURPLE');
+                      setState(() => _isButtonDisabled = !_isButtonDisabled);
+                    },
             )
           ],
         ));
