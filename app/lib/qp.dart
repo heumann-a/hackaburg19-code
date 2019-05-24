@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'util.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class QuestionPage extends StatefulWidget {
-  QuestionPage({Key key, this.title}) : super(key: key);
+  QuestionPage({Key key, this.title, this.channel}) : super(key: key);
 
   final String title;
+  final WebSocketChannel channel;
 
   @override
   _MyQuestionPageState createState() => _MyQuestionPageState();
@@ -14,23 +16,30 @@ class _MyQuestionPageState extends State<QuestionPage> {
   @override
   Widget build(BuildContext context) {
     var questionContainer = new Container(
-      margin: EdgeInsets.all(10.0),
-      padding: EdgeInsets.all(1.0),
-      width: screenAwareSize(300, context), //we might not even need a width
-      height: screenAwareSize(150, context),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(),
-      ),
-      child: Text(
-        "Question here!",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Colors.black,
-            fontSize: screenAwareSize(35, context),
-            fontFamily: "Roboto"),
-      ),
-    );
+        margin: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(1.0),
+        width: screenAwareSize(300, context), //we might not even need a width
+        height: screenAwareSize(150, context),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(),
+        ),
+        child: StreamBuilder(
+          stream: widget.channel.stream,
+          builder: (context, snapshot) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              child: Text(
+                snapshot.hasData ? '${snapshot.data}' : 'Enter a Question',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: screenAwareSize(35, context),
+                    fontFamily: "Roboto"),
+              ),
+            );
+          },
+        ));
 
     var buttonContainer = new Container(
         margin: EdgeInsets.symmetric(
@@ -39,8 +48,11 @@ class _MyQuestionPageState extends State<QuestionPage> {
         ),
         height: screenAwareSize(400, context),
         decoration: BoxDecoration(
-          color: Colors.transparent,
-        ),
+            gradient: LinearGradient(
+                colors: [Color(0x1a000077), Color(0xFF292C36)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                tileMode: TileMode.clamp)),
         child: ListView(
           children: <Widget>[
             MaterialButton(
@@ -53,7 +65,7 @@ class _MyQuestionPageState extends State<QuestionPage> {
               height: screenAwareSize(75, context),
               /*  interaction  */
               onPressed: () {
-                //doSomething!
+                this.widget.channel.sink.add('RED');
               },
             ),
             const SizedBox(
@@ -69,7 +81,7 @@ class _MyQuestionPageState extends State<QuestionPage> {
               height: screenAwareSize(75, context),
               /*  interaction  */
               onPressed: () {
-                //doSomething!
+                this.widget.channel.sink.add('BLUE');
               },
             ),
             const SizedBox(
@@ -85,7 +97,7 @@ class _MyQuestionPageState extends State<QuestionPage> {
               height: screenAwareSize(75, context),
               /*  interaction  */
               onPressed: () {
-                //doSomething!
+                this.widget.channel.sink.add('GREEN');
               },
             ),
             const SizedBox(
@@ -101,7 +113,7 @@ class _MyQuestionPageState extends State<QuestionPage> {
               height: screenAwareSize(75, context),
               /*  interaction  */
               onPressed: () {
-                //doSomething!
+                this.widget.channel.sink.add('YELLOW');
               },
             ),
             const SizedBox(
@@ -117,7 +129,7 @@ class _MyQuestionPageState extends State<QuestionPage> {
               height: screenAwareSize(75, context),
               /*  interaction  */
               onPressed: () {
-                //doSomething!
+                this.widget.channel.sink.add('PURPLE');
               },
             )
           ],

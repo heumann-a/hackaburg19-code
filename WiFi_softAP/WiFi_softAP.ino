@@ -6,15 +6,10 @@
 
 const char *ssid = "stayhydrated";
 
-ESP8266WebServer server(80);
+WiFiServer server(80);
 
 
-void handleRoot() {
-  server.send(200, "text/html", "Get information from here.");
-}
-void handleConnectionTest() {
-  server.send(200, "text/html", "<p>Connection established</p>");
-}
+
 
 void setup() {
   delay(1000);
@@ -32,5 +27,19 @@ void setup() {
 }
 
 void loop() {
-  server.handleClient();
+  WiFiClient client = server.available();
+  if (client) {
+    Serial.println("Request detected");
+    String curLine = "";                // save incoming data to String
+    if (client.connected()) {
+      while (client.available()) {
+        char c = client.read();
+        Serial.write(c);
+        if (c == '\n') { 
+          if (curLine.endsWith("connetionTest")) {
+            client.println("connected");
+          }
+      }
+    }
+  }
 }
