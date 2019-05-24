@@ -3,11 +3,13 @@ import 'qp.dart';
 import 'util.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
+import 'dart:io';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, this.channel}) : super(key: key);
 
   final String title;
+  final WebSocketChannel channel;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -15,6 +17,24 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isConnected = false;
+
+  bool isChannelOpen = false;
+
+  initState() {
+    checkIfConnected();
+  }
+
+  void checkIfConnected() {
+    print('function called');
+    this.widget.channel.stream.listen((message) {
+      print('Message: ${message.toString()}');
+      setState((){
+      isConnected = message.toString() == 'STATUS';
+      });
+    });
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,25 +60,30 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
                   onPressed: () {
-                    setState(() {
-                      isConnected = !isConnected;
-                    });
+                      print('Pre channel Open: ' + isChannelOpen.toString());
+                      this.widget.channel.sink.add('STATUS');
+
                   },
                   color: isConnected ? Colors.green : Colors.red,
                   child: Text(isConnected ? 'Connected' : 'Connect'),
                 )),
-            isConnected ?    
-            Container(
-                width: screenAwareSize(400, context),
-                padding: const EdgeInsets.only(bottom: 30.0, right: 20),
-                alignment: Alignment.bottomRight,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => new QuestionPage(channel: IOWebSocketChannel.connect('ws://echo.websocket.org'),)));
-                  },
-                  backgroundColor: Color(0xFF60626b),
-                  child: Icon(Icons.fast_forward),
-                )): Container(width: 0, height: 0),
+            isConnected
+                ? Container(
+                    width: screenAwareSize(400, context),
+                    padding: const EdgeInsets.only(bottom: 30.0, right: 20),
+                    alignment: Alignment.bottomRight,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    new QuestionPage(channel: widget.channel)));
+                      },
+                      backgroundColor: Color(0xFF60626b),
+                      child: Icon(Icons.fast_forward),
+                    ))
+                : Container(width: 0, height: 0),
           ],
         ));
   }
