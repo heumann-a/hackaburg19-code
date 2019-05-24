@@ -25,9 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void checkIfConnected() {
-    print('function called');
     this.widget.channel.stream.listen((message) {
-      print('Message: ${message.toString()}');
       setState((){
       isConnected = message.toString() == 'STATUS';
       });
@@ -60,9 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
                   onPressed: () {
-                      print('Pre channel Open: ' + isChannelOpen.toString());
                       this.widget.channel.sink.add('STATUS');
-
                   },
                   color: isConnected ? Colors.green : Colors.red,
                   child: Text(isConnected ? 'Connected' : 'Connect'),
