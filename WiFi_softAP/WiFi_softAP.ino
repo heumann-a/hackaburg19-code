@@ -1,13 +1,17 @@
 #include <WiFi.h>
+#include <WiFiUdp.h>
 
 #define ANSWERTIME 5000
 #define MAXPLAYERS 6
+
+#define UDPBUFSIZE 15
 
 enum {red,blue,green,yellow,purple};
 const char *ssid = "stayhydrated";
 const char *pwd = "123456";
 WiFiServer server(80);
-
+WiFiUDP udpListener();
+char *udpPuffer[UDPBUFSIZE];
 boolean standby = false;
 
 int votecount;
@@ -24,7 +28,7 @@ void createServer(){
 
   Serial.println("Starting server..");
 
-  WiFi.setHostname("stayHydrated");
+  WiFi.setHostname(ssid);
   WiFi.softAP(ssid, pwd);
   Serial.println(ssid);
   IPAddress IP = WiFi.softAPIP();
@@ -43,11 +47,19 @@ void setup() {
   Serial.begin(9600);
   Serial.println();
   createServer();
+
+  Serial.println(udpListener.begin(8888)?"UDP listener started":"failed to start UDP listener");
 }
 
 void loop() {
-  
-  String msg="";//
+  if(udpListener.parsePacket()>0){
+    udpListener.read(updPuffer,UDPBUFSIZE);
+  }
+  String msg="";
+  for(int i = 0;i<UDPBUFSIZE;i++){
+    msg+=updPuffer[i];
+  }
+  Serial.println(msg);
   if (msg.equals("STATUS")) {
     //returnr 'OK' to client
   }
