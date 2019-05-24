@@ -13,7 +13,22 @@ class QuestionPage extends StatefulWidget {
 }
 
 class _MyQuestionPageState extends State<QuestionPage> {
-  bool _isButtonDisabled = true;
+  bool _isButtonDisabled = false;
+  var currentQuestion = 'Question Loading';
+
+    initState() {
+    checkForNewAnswers();
+  }
+  
+  void checkForNewAnswers() {
+    this.widget.channel.stream.listen((message) {
+      setState((){
+      currentQuestion = message.toString();
+      _isButtonDisabled = false;
+      });
+    });
+    
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -26,22 +41,15 @@ class _MyQuestionPageState extends State<QuestionPage> {
           color: Colors.white,
           border: Border.all(),
         ),
-        child: StreamBuilder(
-          stream: widget.channel.stream,
-          builder: (context, snapshot) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
-              child: Text(
-                snapshot.hasData ? '${snapshot.data}' : 'Waiting for question...' ,
+        child:  Text(
+                this.currentQuestion ,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: screenAwareSize(35, context),
                     fontFamily: "Roboto"),
               ),
-            );
-          },
-        ));
+        );
 
     var buttonContainer = new Container(
         margin: EdgeInsets.symmetric(

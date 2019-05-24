@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 
         brightness: Brightness.dark,
       ),
-      home: MyHomePage(title: 'Stay Hydrated', channel: IOWebSocketChannel.connect('ws://echo.websocket.org'),),
+      home: MyHomePage(title: 'Stay Hydrated', channel: IOWebSocketChannel.connect('ws://echo.websocket.org')),
     );
   }
 }
