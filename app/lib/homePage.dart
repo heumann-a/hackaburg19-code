@@ -18,12 +18,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool isConnected = false;
 
-  bool isChannelOpen = false;
-
   initState() {
     checkIfConnected();
   }
-
+  
   void checkIfConnected() {
     this.widget.channel.stream.listen((message) {
       setState((){
@@ -59,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: RaisedButton(
                   onPressed: () {
                       this.widget.channel.sink.add('STATUS');
+                      this.widget.channel.sink.close();
                   },
                   color: isConnected ? Colors.green : Colors.red,
                   child: Text(isConnected ? 'Connected' : 'Connect'),
@@ -74,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    new QuestionPage(channel: widget.channel)));
+                                    new QuestionPage(channel: IOWebSocketChannel.connect('ws://echo.websocket.org'))));
                       },
                       backgroundColor: Color(0xFF60626b),
                       child: Icon(Icons.fast_forward),
