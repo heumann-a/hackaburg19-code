@@ -21,8 +21,7 @@ class MyApp extends StatelessWidget {
 
         brightness: Brightness.dark,
       ),
-      // home: MyHomePage(title: 'Stay Hydrated'),
-      home: MyHomePage(title: 'Stuff'),
+      home: MyHomePage(title: 'Stay Hydrated'),
     );
   }
 }
