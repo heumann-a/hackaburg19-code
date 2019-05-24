@@ -33,18 +33,19 @@ flutter:
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
-  # the material Icons class.
+  # the material Icons class.ss
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/stay-hydrated.png
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
-  # For details regarding adding assets from package dependencies, see
+  # For details regarding adding assets from package dependencies, sees
   # https://flutter.io/assets-and-images/#from-packages
 
   # To add custom fonts to your application, add a fonts section here,

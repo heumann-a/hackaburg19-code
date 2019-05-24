@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'util.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -14,20 +15,18 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Have some logo here',
-            ),
+    return Container(
+      width: double.infinity,
+      height: screenAwareSize(5.0, context),
+      child: Stack(children: <Widget>[
+        Container(
+                child: Image.asset("assets/stay-hydrated.png",
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.contain),
+              ),
 
-          ],
-        ),
-      ),
+      ],)
     );
   }
 }
