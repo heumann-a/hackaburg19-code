@@ -6,8 +6,9 @@
 enum {red,blue,green,yellow,purple};
 const char *ssid = "stayhydrated";
 const char *pwd = "123456";
+WiFiServer server(80);
 
-boolean pause = false;
+boolean standby = false;
 
 int votecount;
 int questionTime;
@@ -23,8 +24,9 @@ void createServer(){
 
   Serial.println("Starting server..");
 
-  WiFi.softAP(ssid, pwd, 7);
-
+  WiFi.setHostname("stayHydrated");
+  WiFi.softAP(ssid, pwd);
+  Serial.println(ssid);
   IPAddress IP = WiFi.softAPIP();
 
   Serial.println(IP);
@@ -38,7 +40,7 @@ void createServer(){
 
 void setup() {
   delay(1000);
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println();
   createServer();
 }
@@ -47,10 +49,7 @@ void loop() {
   
   String msg="";//
   if (msg.equals("STATUS")) {
-    Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
-    ReplyBuffer =  "OK\r\n";
-    Udp.write(ReplyBuffer);
-    Udp.endPacket();
+    //returnr 'OK' to client
   }
   if (msg.equals("RED")){
     currentPlayerstats[red]+=1;
@@ -79,9 +78,7 @@ void loop() {
   }
 
   if(nextQuestion){
-    Udp.beginPacket(broadcastIp);
-    Udp.write("Question/r/n");
-    Udp.endPacket();
+    //push  next question to clients
     questionTime = millis();
     nextQuestion = false;
   }
@@ -93,9 +90,9 @@ void loop() {
     
     do{
       
-      //check if pause
+      //check if standby
       
-    } while(pause);
+    } while(standby);
     
     nextQuestion = true;
   }
