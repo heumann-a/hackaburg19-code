@@ -29,7 +29,7 @@
 void setupSD() {
 
 
-    randomSeed(second()); 
+    randomSeed(5); 
     
     Serial.begin(115200);
     if(!SD.begin()){
@@ -97,19 +97,33 @@ void getQuestion(fs::FS &fs, const char * path, int maxindex){
       file.read();  
     }
   }
-  
-  
+   
+}
+
+int getQuestionNumber(fs::FS &fs, const char * path){
+
+  File file;
+  if(!TestFile(fs, path)){
+    return 0;
+  }else{
+     file = fs.open(path); 
+     int numbers = (int)file.read();
+     Serial.println(numbers);
+     //finalString+=(char)mappa.read();
+     return numbers;
+  }
 }
 
 
 void loop() {
   const char* fragedatei = "/questions.txt";
+  const char* anzahlfragen = "/questionsnumbers.txt";
   Serial.println(fragedatei);
   Serial.println("Test");
-  if(!TestFile(SD, fragedatei)){
-    Serial.println("Datei nicht gefunden!!");
-  }
+  getQuestionNumber(SD,anzahlfragen);
+  
   char * test = new char[5];
+  delete[] test;
   delay(5000);
  
 }
