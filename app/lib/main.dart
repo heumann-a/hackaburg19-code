@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'homePage.dart';
+import 'qp.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
 
         brightness: Brightness.dark,
       ),
-      home: MyHomePage(title: 'Stay Hydrated'),
+      // home: MyHomePage(title: 'Stay Hydrated'),
+      home: QuestionPage(title: 'Stuff'),
     );
   }
 }
