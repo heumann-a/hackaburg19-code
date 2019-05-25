@@ -30,16 +30,16 @@ int currentPlayerstats[] = {0, 0, 0, 0, 0};
 int nextQuestionRecieved = 0;
 
 int currQuestion=0;
-String questionField[] = {"Wer schaut die meisten Pornos",
-"Wer hatte die meisten Dreier?",
-"Wer hat die meisten Gesetze gebrochen?",
-"Wer ist am oeftesten schwarz gefahren?",
-"Wer luegt am meisten?",
-"Wer trinkt am meisten?",
-"Wer landet am ehesten im Gefaengnis?",
-"Wer schlaeft am wenigsten?",
-"Wer kriegt am ehesten eine Glatze?",
-"Wer wandert am ehesten aus?"};
+String questionField[] = {"Who makes the most commits",
+"First Commit?",
+"Who drinks the most coffee?",
+"Who writes the worst code?",
+"Worst commit messages?",
+"Mr. Neversleep?",
+"Apple Fanboy",
+"Who would mess up prod?",
+"Most bugs?",
+"The Laziest?"};
 
 ESP8266WebServer server(80);    // Create a webserver object that listens for HTTP request on port 80
 
@@ -52,6 +52,7 @@ const char *ssid = "HydrationGame"; // The name of the Wi-Fi network that will b
 const char *password = "123456789";  // The password required to connect to it
 
 int player;
+int dif;
 int targetPlayer;
 int toSteps(int, int);
 Stepper myStepper(stepsPerRevolution, 5, 4, 14, 12);
@@ -85,7 +86,7 @@ void setup(void){
   Serial.println("HTTP server started");
 
   myStepper.setSpeed(15);
-  player = 1;
+  player = 0;
 }
 void loop(void){
   server.handleClient();                     // Listen for HTTP requests from clients
@@ -179,15 +180,26 @@ void handleNotFound(){
 
 int toSteps(int start, int goal){
   player = goal;
-  if(start==goal)return 0;
-  if(goal>start){
-    //Serial.println((goal-start)*stepsBetween);
-    return (start-goal)*stepsBetween;
+  dif = (start-player);
+  if(dif==4){
+    Serial.println("case 4");
+    return -1*stepsBetween;
   }
-  if(goal<start){
-    //Serial.println(-1*(goal-start)*stepsBetween);
-    return -1*(start-goal)*stepsBetween;
+  if(dif==-4){
+    Serial.println("case -4");
+    return 1*stepsBetween;
   }
+  if(dif==3){
+    Serial.println("case 3");
+    return -2*stepsBetween;
+  }
+  if(dif==-3){
+    Serial.println("case -3");
+    return 2*stepsBetween;
+  }
+  Serial.println("Spieler ueberfahren:");
+  Serial.println(dif);
+  return dif*stepsBetween;
 }
 
 int mostVoted(int votes[]){
