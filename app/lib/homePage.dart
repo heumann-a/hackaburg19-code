@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'qp.dart';
 import 'util.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/io.dart';
-import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, this.channel}) : super(key: key);
+  MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
-  final WebSocketChannel channel;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -17,18 +14,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isConnected = false;
-
-  initState() {
-    checkIfConnected();
-  }
   
-  void checkIfConnected() {
-    this.widget.channel.stream.listen((message) {
-      setState((){
-      isConnected = message.toString() == 'STATUS';
-      });
+  Future checkIfConnected() async {
+    var response  = await http.get('http://192.168.4.1:80/connected');
+
+    setState(() {
+      isConnected = response.statusCode == 200;
     });
-    
   }
 
   @override
@@ -55,8 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.only(bottom: 30.0),
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
-                  onPressed: () {
-                      this.widget.channel.sink.add('STATUS');
+                  onPressed: () async {
+                      await checkIfConnected();
                   },
                   color: isConnected ? Colors.green : Colors.red,
                   child: Text(isConnected ? 'Connected' : 'Connect'),
@@ -72,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    new QuestionPage(channel: IOWebSocketChannel.connect('ws://echo.websocket.org'))));
+                                    new QuestionPage()));
                       },
                       backgroundColor: Color(0xFF60626b),
                       child: Icon(Icons.fast_forward),

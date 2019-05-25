@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'util.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:http/http.dart' as http;
 
 class QuestionPage extends StatefulWidget {
-  QuestionPage({Key key, this.title, this.channel}) : super(key: key);
+  QuestionPage({Key key, this.title}) : super(key: key);
 
   final String title;
-  final WebSocketChannel channel;
 
   @override
   _MyQuestionPageState createState() => _MyQuestionPageState();
@@ -16,42 +15,42 @@ class _MyQuestionPageState extends State<QuestionPage> {
   bool _isButtonDisabled = false;
   var currentQuestion = 'Question Loading';
 
-    initState() {
-    checkForNewAnswers();
-  }
-  
-  void checkForNewAnswers() {
-    this.widget.channel.stream.listen((message) {
-      setState((){
-      _isButtonDisabled = currentQuestion == message.toString();
-      currentQuestion = message.toString(); 
-      // Uncomment when network stuff is done
-      // _isButtonDisabled = false;
+  initState() {
+    http.get('http://192.168.4.1:80/question').then((response) {
+      setState(() {
+        currentQuestion = response.body;
       });
     });
-    
   }
-  
+
+  Future checkForNewAnswers(String color) async {
+    var response = await http.post('http://192.168.4.1:80/answer?answer=${color}');
+    setState(() {
+      currentQuestion = response.body;
+      _isButtonDisabled = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var questionContainer = new Container(
-        margin: EdgeInsets.all(10.0),
-        padding: EdgeInsets.all(1.0),
-        width: screenAwareSize(300, context), //we might not even need a width
-        height: screenAwareSize(150, context),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(),
-        ),
-        child:  Text(
-                this.currentQuestion ,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: screenAwareSize(35, context),
-                    fontFamily: "Roboto"),
-              ),
-        );
+      margin: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(1.0),
+      width: screenAwareSize(300, context), //we might not even need a width
+      height: screenAwareSize(150, context),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(),
+      ),
+      child: Text(
+        this.currentQuestion,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colors.black,
+            fontSize: screenAwareSize(35, context),
+            fontFamily: "Roboto"),
+      ),
+    );
 
     var buttonContainer = new Container(
         margin: EdgeInsets.symmetric(
@@ -81,9 +80,9 @@ class _MyQuestionPageState extends State<QuestionPage> {
               /*  interaction  */
               onPressed: _isButtonDisabled
                   ? null
-                  : () {
-                      this.widget.channel.sink.add('RED');
+                  : () async {
                       setState(() => _isButtonDisabled = !_isButtonDisabled);
+                      await checkForNewAnswers('RED');
                     },
             ),
             const SizedBox(
@@ -103,9 +102,9 @@ class _MyQuestionPageState extends State<QuestionPage> {
               /*  interaction  */
               onPressed: _isButtonDisabled
                   ? null
-                  : () {
-                      this.widget.channel.sink.add('BLUE');
+                  : () async {
                       setState(() => _isButtonDisabled = !_isButtonDisabled);
+                      await checkForNewAnswers('BLUE');
                     },
             ),
             const SizedBox(
@@ -125,9 +124,9 @@ class _MyQuestionPageState extends State<QuestionPage> {
               /*  interaction  */
               onPressed: _isButtonDisabled
                   ? null
-                  : () {
-                      this.widget.channel.sink.add('GREEN');
+                  : () async {
                       setState(() => _isButtonDisabled = !_isButtonDisabled);
+                      await checkForNewAnswers('GREEN');
                     },
             ),
             const SizedBox(
@@ -147,9 +146,9 @@ class _MyQuestionPageState extends State<QuestionPage> {
               /*  interaction  */
               onPressed: _isButtonDisabled
                   ? null
-                  : () {
-                      this.widget.channel.sink.add('YELLOW');
+                  : () async {
                       setState(() => _isButtonDisabled = !_isButtonDisabled);
+                      await checkForNewAnswers('YELLOW');
                     },
             ),
             const SizedBox(
@@ -169,9 +168,9 @@ class _MyQuestionPageState extends State<QuestionPage> {
               /*  interaction  */
               onPressed: _isButtonDisabled
                   ? null
-                  : () {
-                      this.widget.channel.sink.add('PURPLE');
+                  : () async {
                       setState(() => _isButtonDisabled = !_isButtonDisabled);
+                      await checkForNewAnswers('PURPLE');
                     },
             )
           ],

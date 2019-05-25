@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'homePage.dart';
 import 'package:flutter/services.dart';
-import 'package:web_socket_channel/io.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
 
         brightness: Brightness.dark,
       ),
-      home: MyHomePage(title: 'Stay Hydrated', channel: IOWebSocketChannel.connect('ws://echo.websocket.org')),
+      home: MyHomePage(title: 'Stay Hydrated'),
     );
   }
 }
