@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'util.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class QuestionPage extends StatefulWidget {
   QuestionPage({Key key, this.title}) : super(key: key);
@@ -24,9 +25,17 @@ class _MyQuestionPageState extends State<QuestionPage> {
   }
 
   Future checkForNewAnswers(String color) async {
-    var response = await http.post('http://192.168.4.1:80/answer?answer=${color}');
+    await http.post('http://192.168.4.1:80/answer?answer=${color}');
+
+    var newQuestionResponse = await http.get('http://192.168.4.1:80/question');
+
+    while(newQuestionResponse.body == currentQuestion || newQuestionResponse.body == '') {
+      newQuestionResponse = await http.get('http://192.168.4.1:80/question');
+       sleep(const Duration(milliseconds: 100));
+    }
+
     setState(() {
-      currentQuestion = response.body;
+      currentQuestion = newQuestionResponse.body;
       _isButtonDisabled = false;
     });
   }
